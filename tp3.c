@@ -65,7 +65,6 @@ void elimina_invalido(struct racional **vetor, int *tam)
             vetor[i] = vetor[*tam - 1];
             *tam = (*tam) - 1;
             i--;
-            destroi_r(vetor[*tam-1]);
         }
     }
 }
@@ -123,13 +122,6 @@ int main (){
     printf("a soma de todos os elementos eh: ");
     imprime_r(soma);
     printf("\n");
-
-    for (i = 0; i < n; i++)
-    {
-        destroi_r(vetorPointers[i]);
-    }
-
-    free(vetorPointers);
 
     return 0;
 }
