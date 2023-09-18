@@ -1,5 +1,6 @@
 #include "racionais.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 /* Maximo Divisor Comum entre a e b      */
 /* calcula o mdc pelo metodo de Euclides */
@@ -24,13 +25,17 @@ struct racional *cria_r (long int numerador, long int denominador)
     struct racional *r = malloc(sizeof(struct racional));
     r->num = numerador;
     r->den = denominador;
-    return &r;
+    return r;
 }
 
 /* Libera o espaco alocado para o racional */
 void destroi_r (struct racional *r)
 {   
-    
+    /*checa se o ponteiro já não é nulo*/
+    if (r != NULL)
+    {
+        free(r);
+    }
 }
 
 /*acessa e retorna o númerador de um número racional*/
@@ -62,15 +67,15 @@ void imprime_r (struct racional *r)
     }
     else if ((r->num == 0) || (r->den == 1))
     {
-        printf("%d ", r->num);
+        printf("%ld ", r->num);
         return;
     }
     else if (((r->num < 0) && (r->num < 0)) || ((r->num > 0) && (r->den < 0)))
     {
-        printf("%d/%d ", -r->num, -r->den);
+        printf("%ld/%ld ", -r->num, -r->den);
         return;
     }
-    printf("%d/%d ", r->num, r->den);
+    printf("%ld/%ld ", r->num, r->den);
 }
 
 /* Compara dois números racionais r1 e r2.
