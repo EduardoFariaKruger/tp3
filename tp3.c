@@ -36,7 +36,6 @@ void imprimir_vetor(struct racional **vetor, int tam)
 /*ordena um vetor de racionais do menor para o maior*/
 void ordenar_vetor(struct racional **vetor, int tam)
 {
-{
     struct racional *aux;
     for (int i = 0; i < tam; i++)
     {
@@ -53,7 +52,6 @@ void ordenar_vetor(struct racional **vetor, int tam)
         vetor[menor] = aux;
     }
 }
-}
 
 /*identifica e elimina todos os números racionais inválidos dentro do vetor, esse algoritmo é quadrático, porém ele funciona para qualquer instância desse problema*/
 void elimina_invalido(struct racional **vetor, int *tam)
@@ -64,22 +62,17 @@ void elimina_invalido(struct racional **vetor, int *tam)
         {
             vetor[i] = vetor[*tam - 1];
             *tam = (*tam) - 1;
+            destroi_r(vetor[*tam -1]);
             i--;
         }
     }
 }
 
-void insertionSort(struct racional **vetor, int n) {
-    int i, j;
-    struct racional *chave;
-    for (i = 1; i < n; i++) {
-        chave = vetor[i];
-        j = i - 1;
-        while (j >= 0 && compara_r(vetor[j], chave) == 1) {
-            vetor[j + 1] = vetor[j];
-            j = j - 1;
-        }
-        vetor[j + 1] = chave;
+void libera_vetor(struct racional **vetor, int n)
+{
+    for (int i=0; i < n; i++)
+    {
+        destroi_r(vetor[i]);
     }
 }
 
@@ -97,13 +90,11 @@ int main (){
     /* vetor de ponteiros para racionais */
     struct racional **vetorPointers;
     struct racional *soma;
-    int n, i;
+    int n;
 
     scanf("%d", &n);
 
-    vetorPointers = (struct racional **) malloc(n*(sizeof(struct racional *)));
-
-    
+    vetorPointers = (struct racional **) malloc(n*(sizeof(struct racional *)));    
 
 
     criar_vetor(vetorPointers, n);
@@ -122,6 +113,10 @@ int main (){
     printf("a soma de todos os elementos eh: ");
     imprime_r(soma);
     printf("\n");
+
+    libera_vetor(vetorPointers, n);
+    free(vetorPointers);
+    destroi_r(soma);
 
     return 0;
 }
