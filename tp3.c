@@ -104,34 +104,38 @@ struct racional *soma_vetor(struct racional **vetor, int tam)
 
 int main (){
     /* vetor de ponteiros para racionais */
-    struct racional **vetorPointers;
+    struct racional **v;
+
+    /*variavel que vai guardar a soma*/
     struct racional *soma;
+
+    /*tamanho do vetor*/
     int n;
 
     scanf("%d", &n);
 
-    vetorPointers = (struct racional **) malloc(n*(sizeof(struct racional *)));    
+    v = (struct racional **) malloc(n*(sizeof(struct racional *)));    
 
 
-    criar_vetor(vetorPointers, n);
+    criar_vetor(v, n);
 
-    imprimir_vetor(vetorPointers, n);
+    imprimir_vetor(v, n);
 
-    elimina_invalido(vetorPointers, &n);
+    elimina_invalido(v, &n);
 
-    imprimir_vetor(vetorPointers, n); 
+    imprimir_vetor(v, n); 
 
-    ordenar_vetor(vetorPointers, n);   
+    ordenar_vetor(v, n);   
 
-    imprimir_vetor(vetorPointers, n);
+    imprimir_vetor(v, n);
 
-    soma = soma_vetor(vetorPointers, n);
+    soma = soma_vetor(v, n);
     printf("a soma de todos os elementos eh: ");
     imprime_r(soma);
     printf("\n");
 
-    libera_vetor(vetorPointers, n);
-    free(vetorPointers);
+    libera_vetor(v, n);
+    free(v);
     destroi_r(soma);
 
 

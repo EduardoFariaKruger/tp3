@@ -23,6 +23,11 @@ int mmc (int a, int b){
 struct racional *cria_r (long int numerador, long int denominador)
 {   
     struct racional *r = malloc(sizeof(struct racional));
+    /*checa se o ponteiro foi alocado*/
+    if (r == NULL)
+    {
+        return NULL;
+    }
     r->num = numerador;
     r->den = denominador;
     return r;
@@ -39,15 +44,25 @@ void destroi_r (struct racional *r)
 }
 
 /*acessa e retorna o númerador de um número racional*/
-long int numerador_r (struct racional *r)
+int numerador_r (struct racional *r, long int *num)
 {
-    return r->num;
+    if (!valido_r(r))
+    {
+        return 0;
+    }
+    *num = r->num;
+    return 1;
 }
 
 /* acessa e retorna o denominador de um racional */
-long int denominador_r (struct racional *r)
+int denominador_r (struct racional *r, long int *den)
 {
-    return r->den;
+    if (!valido_r(r))
+    {
+        return 0;
+    }
+    *den = r->den;
+    return 1;
 }
 
 /* Retorna 1 se o racional r eh valido ou 0 se for inválido
@@ -55,6 +70,10 @@ long int denominador_r (struct racional *r)
  * se ele não tiver sido alocado. */
 int valido_r (struct racional *r)
 {
+    if (r == NULL || r->den == 0)
+    {
+        return 0;
+    }
     return (!(r->den == 0));
 }
 
@@ -86,6 +105,10 @@ void imprime_r (struct racional *r)
  * pode resultar em erro numerico e falsear o teste. */
 int compara_r (struct racional *r1, struct racional *r2)
 {
+    if (!valido_r(r1) || !valido_r(r2))
+    {
+        return -2;
+    }
     int MMC = mmc(r1->den, r2->den);
     int num1 = MMC/r1->den*r1->num;
     int num2 = MMC/r2->den*r2->num;
@@ -107,6 +130,7 @@ int compara_r (struct racional *r1, struct racional *r2)
  * Se o denominador for negativo, o sinal deve migrar para o numerador. */
 int simplifica_r (struct racional *r)
 {
+    /*a funcao valido já faz a checagem de invalido do ponteiro*/
     if (valido_r(r))
     {
         int maiorDivisor = mdc(r->num, r->den);
@@ -123,6 +147,10 @@ int simplifica_r (struct racional *r)
  * Retorna 1 em sucesso e 0 se r1 ou r2 for nulo ou inválido. */
 int soma_r (struct racional *r1, struct racional *r2, struct racional *r3)
 {
+    if (!valido_r(r1) || !valido_r(r2))
+    {
+        return 0;
+    }
     int minMC = mmc(r1->den, r2->den);
     r3->num = minMC/r1->den*r1->num + minMC/r2->den*r2->num;
     r3->den = minMC;
@@ -134,6 +162,10 @@ int soma_r (struct racional *r1, struct racional *r2, struct racional *r3)
  * Retorna 1 em sucesso e 0 se r1 ou r2 for nulo ou inválido. */
 int subtrai_r (struct racional *r1, struct racional *r2, struct racional *r3)
 {
+    if (!valido_r(r1) || !valido_r(r2))
+    {
+        return 0;
+    }
     int minMC = mmc(r1->den, r2->den);
     r3->num = minMC/r1->den*r1->num - minMC/r2->den*r2->num;
     r3->den = minMC;
@@ -143,11 +175,15 @@ int subtrai_r (struct racional *r1, struct racional *r2, struct racional *r3)
 
 /* Coloca em *r3 o produto simplificado dos racionais *r1 e *r2.
  * Retorna 1 em sucesso e 0 se r1 ou r2 for nulo ou inválido. */
-int multiplica_r (struct racional *r1, struct racional *r, struct racional *r32)
+int multiplica_r (struct racional *r1, struct racional *r, struct racional *r3)
 {
-    r32->num = r1->num * r->num;
-    r32->den = r1->den * r->den;
-    simplifica_r(r32);
+    if (!valido_r(r1) || !valido_r(r3))
+    {
+        return 0;
+    }
+    r3->num = r1->num * r->num;
+    r3->den = r1->den * r->den;
+    simplifica_r(r3);
     return 1;
 }
 
@@ -155,6 +191,10 @@ int multiplica_r (struct racional *r1, struct racional *r, struct racional *r32)
  * Retorna 1 em sucesso e 0 se r1 ou r2 for nulo ou inválido. */
 int divide_r (struct racional *r1, struct racional *r2, struct racional *r3)
 {
+    if (!valido_r(r1) || !valido_r(r2))
+    {
+        return 0;
+    }
     r3->num = r1->num * r2->den;
     r3->den = r1->den * r2->num;
     if (r3->den == 0)
