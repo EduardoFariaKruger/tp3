@@ -51,18 +51,36 @@ void ordenar_vetor(struct racional **vetor, int tam)
     }
 }
 
-/*identifica e elimina todos os números racionais inválidos dentro do vetor, esse algoritmo é quadrático, porém ele funciona para qualquer instância desse problema*/
-void elimina_invalido(struct racional **vetor, int *tam)
+void troca(struct racional **v, int i, int j)
 {
-    for (int i = 0; i < *tam; i++)
-    {
-        if (!valido_r(vetor[i]))
-        {
-            vetor[i] = vetor[*tam - 1];
-            *tam = (*tam) - 1;
-            destroi_r(vetor[*tam -1]);
-            i--;
+    struct racional *aux = (struct racional *) malloc(sizeof(struct racional *));
+    aux = v[i];
+    v[j] = v[i];
+    v[i] = aux;
+    free(aux);
+}
+
+/*identifica e elimina todos os números racionais inválidos dentro do vetor, esse algoritmo é quadrático, porém ele funciona para qualquer instância desse problema*/
+void elimina_invalido(struct racional **v, int *n)
+{
+    int i = 0;
+    while (i < *n) {
+        if (!valido_r(v[i])) {
+            destroi_r(v[i]);
+            (*n)--;
+            while ((*n) > i) {
+                if (valido_r(v[*n])) {
+                    v[i] = v[*n];
+                    /* eu nao consegui tirar esse break daqui de maneira
+                     * eficiente */
+                    break;
+                }
+                destroi_r(v[*n]);
+                (*n)--;
+            }
         }
+
+        i++;
     }
 }
 
@@ -115,6 +133,7 @@ int main (){
     libera_vetor(vetorPointers, n);
     free(vetorPointers);
     destroi_r(soma);
+
 
     return 0;
 }
